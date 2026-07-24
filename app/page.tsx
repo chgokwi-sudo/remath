@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import QuadraticGraph from "@/components/QuadraticGraph";
 
 export default function Home() {
   return (
@@ -10,27 +11,23 @@ export default function Home() {
         shadow-lg: 은은하고 넓게 퍼지는 그림자 효과
         p-8 md:p-16: 모바일에서는 적당히(8), 태블릿 이상에서는 넓은(16) 여백 적용
       */}
-      <section className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 md:p-16 text-center max-w-2xl w-full flex flex-col items-center border border-gray-50/50">
+      <section className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 md:p-12 text-center w-full flex flex-col items-center border border-gray-50/50">
         
         {/* 환영 문구 영역 */}
         <div className="inline-flex items-center rounded-full border border-gray-100 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-500 mb-6">
-          🎉 첫 번째 웹앱 세팅 완료!
+          🎉 수학 교육 앱에 오신 것을 환영합니다!
         </div>
         
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-4">
-          나만의 <span className="text-blue-500">교육용 웹앱</span> 만들기
+          <span className="text-blue-500">이차함수</span> 그래프 탐구
         </h1>
         
-        <p className="text-gray-500 mb-10 max-w-md mx-auto text-base leading-relaxed">
-          선생님만의 특별한 아이디어를 이곳에 추가해 보세요.
-          이 코드는 자유롭게 수정하고 확장할 수 있도록 만들어졌습니다.
+        <p className="text-gray-500 mb-10 max-w-lg mx-auto text-base leading-relaxed">
+          아래 슬라이더를 움직여서 이차함수의 계수 $a, b, c$ 값이 그래프의 모양과 위치에 어떤 영향을 미치는지 실시간으로 확인해 보세요.
         </p>
 
-        {/* 기능 추가를 위한 가짜(Placeholder) 버튼 */}
-        <button className="group flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6 py-3 text-sm font-medium transition-all shadow-sm hover:shadow-md w-full sm:w-auto">
-          <Plus className="w-4 h-4 transition-transform group-hover:rotate-90" />
-          <span>새로운 기능 추가하기</span>
-        </button>
+        {/* 이차함수 그래프 컴포넌트 렌더링 */}
+        <QuadraticGraph />
         
       </section>
     </div>
