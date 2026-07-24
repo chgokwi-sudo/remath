@@ -10,12 +10,18 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
+  ReferenceDot,
 } from "recharts";
 
 export default function QuadraticGraph() {
   const [a, setA] = useState<number>(1);
   const [b, setB] = useState<number>(0);
   const [c, setC] = useState<number>(0);
+
+  // 꼭짓점 좌표 계산 (p, q)
+  // y = a(x - p)^2 + q
+  const p = a !== 0 ? -b / (2 * a) : 0;
+  const q = a !== 0 ? c - (b * b) / (4 * a) : c;
 
   // x값의 범위를 -10부터 10까지 0.5 간격으로 생성하고 그에 따른 y값을 계산
   const data = useMemo(() => {
@@ -29,6 +35,22 @@ export default function QuadraticGraph() {
     return points;
   }, [a, b, c]);
 
+  // 꼭짓점(표준형) 수식 포맷팅
+  const renderVertexForm = () => {
+    if (a === 0) return null;
+    const aStr = a === 1 ? "" : a === -1 ? "-" : a;
+    
+    let xTerm = "x";
+    if (p !== 0) {
+      xTerm = p > 0 ? `(x - ${p})` : `(x + ${Math.abs(p)})`;
+    }
+    
+    const xPart = p !== 0 ? `${xTerm}²` : "x²";
+    const qStr = q !== 0 ? (q > 0 ? ` + ${q}` : ` - ${Math.abs(q)}`) : "";
+    
+    return `y = ${aStr}${xPart}${qStr}`;
+  };
+
   return (
     <div className="w-full flex flex-col items-center mt-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* 
@@ -36,13 +58,28 @@ export default function QuadraticGraph() {
         부드러운 모서리(rounded-2xl)와 얇은 외곽선(border), 은은한 배경색 적용 
       */}
       <div className="w-full max-w-2xl bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-6 md:p-8 mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">
-          <span className="text-blue-500 font-mono text-2xl tracking-tighter">
-            y = {a === 1 ? "" : a === -1 ? "-" : a}x² 
-            {b !== 0 ? (b > 0 ? ` + ${b}x` : ` - ${Math.abs(b)}x`) : ""} 
-            {c !== 0 ? (c > 0 ? ` + ${c}` : ` - ${Math.abs(c)}`) : ""}
-          </span>
-        </h2>
+        <div className="text-center mb-6 flex flex-col items-center gap-1">
+          {/* 일반형 수식 */}
+          <h2 className="text-xl font-bold text-gray-900">
+            <span className="text-blue-500 font-mono text-2xl tracking-tighter">
+              y = {a === 1 ? "" : a === -1 ? "-" : a}x² 
+              {b !== 0 ? (b > 0 ? ` + ${b}x` : ` - ${Math.abs(b)}x`) : ""} 
+              {c !== 0 ? (c > 0 ? ` + ${c}` : ` - ${Math.abs(c)}`) : ""}
+            </span>
+          </h2>
+          {/* 표준형 (꼭짓점형) 수식 */}
+          {a !== 0 && (
+            <p className="text-gray-500 font-mono text-lg tracking-tighter">
+              {renderVertexForm()}
+            </p>
+          )}
+          {/* 꼭짓점 정보 텍스트 */}
+          {a !== 0 && (
+            <p className="text-sm text-red-500 font-medium mt-1">
+              꼭짓점: ({p}, {q})
+            </p>
+          )}
+        </div>
         
         <div className="w-full h-[300px] md:h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -68,6 +105,17 @@ export default function QuadraticGraph() {
               />
               <ReferenceLine x={0} stroke="#9ca3af" strokeWidth={1} />
               <ReferenceLine y={0} stroke="#9ca3af" strokeWidth={1} />
+              
+              {/* 대칭축 (점선) */}
+              {a !== 0 && (
+                <ReferenceLine 
+                  x={p} 
+                  stroke="#ef4444" 
+                  strokeDasharray="5 5" 
+                  strokeWidth={2} 
+                />
+              )}
+
               <Line
                 type="monotone"
                 dataKey="y"
@@ -76,6 +124,18 @@ export default function QuadraticGraph() {
                 dot={false}
                 activeDot={{ r: 6, fill: "#3b82f6", stroke: "#fff", strokeWidth: 2 }}
               />
+
+              {/* 꼭짓점 */}
+              {a !== 0 && (
+                <ReferenceDot 
+                  x={p} 
+                  y={q} 
+                  r={6} 
+                  fill="#ef4444" 
+                  stroke="#ffffff" 
+                  strokeWidth={2} 
+                />
+              )}
             </LineChart>
           </ResponsiveContainer>
         </div>
